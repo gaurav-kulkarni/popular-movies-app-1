@@ -154,6 +154,8 @@ public class MainActivityFragment extends Fragment {
 
         private Movie[] getMovieDataFromJson(String forecastJsonStr)
                 throws JSONException {
+
+
             final String RESULTS = "results";
             JSONObject moviesJson = new JSONObject(forecastJsonStr);
             JSONArray moviesArray = moviesJson.getJSONArray(RESULTS);
@@ -168,7 +170,8 @@ public class MainActivityFragment extends Fragment {
                 String vote_average = movieJson.getString("vote_average");
                 String overview = movieJson.getString("overview");
 
-                Movie movie = new Movie(poster_path, original_title, release_date, vote_average, overview);
+                String id = movieJson.getString("id");
+                Movie movie = new Movie(id, poster_path, original_title, release_date, vote_average, overview);
 
                 movies[i] = movie;
             }
