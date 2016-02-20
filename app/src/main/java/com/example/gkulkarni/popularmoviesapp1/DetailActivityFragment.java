@@ -35,6 +35,7 @@ import java.util.List;
 public class DetailActivityFragment extends Fragment {
 
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+    private final String api_key = "";
 
     public DetailActivityFragment() {
     }
@@ -76,7 +77,6 @@ public class DetailActivityFragment extends Fragment {
         protected List<String> doInBackground(String... params) {
             final String MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/";
             final String API_KEY_PARAM = "api_key";
-            String api_key = "";
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String jsonDataStr;
@@ -175,7 +175,6 @@ public class DetailActivityFragment extends Fragment {
         protected List<String> doInBackground(String... params) {
             final String MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/";
             final String API_KEY_PARAM = "api_key";
-            String api_key = "";
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String jsonDataStr;
