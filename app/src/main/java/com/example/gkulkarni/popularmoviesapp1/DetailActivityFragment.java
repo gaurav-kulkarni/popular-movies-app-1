@@ -1,6 +1,5 @@
 package com.example.gkulkarni.popularmoviesapp1;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,6 +35,9 @@ public class DetailActivityFragment extends Fragment {
 
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private final String api_key = "";
+    public static final String ARG_ITEM_ID = "item_id";
+
+    private Movie mMovie;
 
     public DetailActivityFragment() {
     }
@@ -44,28 +46,35 @@ public class DetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mMovie = arguments.getParcelable(DetailActivityFragment.ARG_ITEM_ID);
+            Log.i(LOG_TAG, mMovie.id+mMovie.overview+mMovie.release_date);
 
-        // The detail Activity called via intent.  Inspect the intent for movies data.
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            Movie movie = (Movie) intent.getSerializableExtra("movie");
             ((TextView) rootView.findViewById(R.id.movieTitle))
-                    .setText(movie.original_title);
+                    .setText(mMovie.original_title);
             ImageView iconView = (ImageView) rootView.findViewById(R.id.moviePoster);
-            Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w185/"+movie.image).into(iconView);
+            Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w185/"+mMovie.image).into(iconView);
             ((TextView) rootView.findViewById(R.id.movieSynopsis))
-                    .setText(movie.overview);
+                    .setText(mMovie.overview);
             ((TextView) rootView.findViewById(R.id.movieRating))
-                    .setText(movie.vote_average);
+                    .setText(mMovie.vote_average);
             ((TextView) rootView.findViewById(R.id.movieReleaseDate))
-                    .setText(movie.release_date);
+                    .setText(mMovie.release_date);
 
             FetchReviewsTask frt = new FetchReviewsTask();
-            frt.execute(movie.id);
+            frt.execute(mMovie.id);
 
             FetchTrailersTask ftt = new FetchTrailersTask();
-            ftt.execute(movie.id);
+            ftt.execute(mMovie.id);
         }
+
+        // The detail Activity called via intent.  Inspect the intent for movies data.
+//        Intent intent = getActivity().getIntent();
+//        if (intent != null) {
+//            Movie movie = (Movie) intent.getSerializableExtra("movie");
+
+//        }
         return rootView;
     }
 

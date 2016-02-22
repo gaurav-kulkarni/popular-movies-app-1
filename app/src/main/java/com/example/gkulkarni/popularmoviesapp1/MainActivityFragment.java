@@ -1,6 +1,5 @@
 package com.example.gkulkarni.popularmoviesapp1;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -35,6 +34,18 @@ public class MainActivityFragment extends Fragment {
     private final String api_key = "";
     private MovieAdapter movieAdapter;
 
+    /**
+    * A callback interface that all activities containing this fragment must
+    * implement. This mechanism allows activities to be notified of item
+    * selections.
+    */
+    public interface Callback {
+    /**
+    * DetailFragmentCallback for when an item has been selected.
+    */
+        public void onItemSelected(Movie movie);
+    }
+
     public MainActivityFragment() {
     }
 
@@ -53,9 +64,12 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Movie movie = movieAdapter.getItem(position);
 //                Toast.makeText(getActivity(), movie.original_title, Toast.LENGTH_SHORT).show();
-                Intent detailActivityIntent = new Intent(getActivity(), DetailActivity.class).putExtra("movie", movie);
+//                Intent detailActivityIntent = new Intent(getActivity(), DetailActivity.class).putExtra("movie", movie);
+//
+//                startActivity(detailActivityIntent);
 
-                startActivity(detailActivityIntent);
+                ((Callback) getActivity())
+                    .onItemSelected(movie);
             }
         });
 
