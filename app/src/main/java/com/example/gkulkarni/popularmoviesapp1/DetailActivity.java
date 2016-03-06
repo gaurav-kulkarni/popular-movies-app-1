@@ -52,7 +52,7 @@ public class DetailActivity extends AppCompatActivity {
                 Cursor retCursor = null;
                 Intent intent = getIntent();
                 if (intent != null) {
-                    Movie movie = (Movie) intent.getSerializableExtra("movie");
+                    Movie movie = (Movie) intent.getExtras().get(DetailActivityFragment.ARG_ITEM_ID);
                     Snackbar.make(view, movie.original_title+" added to Favourites!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
