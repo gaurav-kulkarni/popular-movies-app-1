@@ -1,8 +1,15 @@
 package com.example.gkulkarni.popularmoviesapp1;
 
+import android.annotation.TargetApi;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -67,6 +74,46 @@ public class DetailActivityFragment extends Fragment {
 
             FetchTrailersTask ftt = new FetchTrailersTask();
             ftt.execute(mMovie.id);
+
+            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public void onClick(View view) {
+//                fab.setImageDrawable(getResources().getDrawable(android.support.design.R.drawable.abc_btn_rating_star_on_mtrl_alpha, getApplicationContext().getTheme()));
+
+                    Cursor retCursor = null;
+                    Snackbar.make(view, mMovie.original_title + " added to Favourites!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                    FavouritesDbHelper fDbHelper = new FavouritesDbHelper(getActivity().getApplicationContext());
+                    final SQLiteDatabase db = fDbHelper.getWritableDatabase();
+                    ContentValues favValues = new ContentValues();
+                    favValues.put(FavouritesContract.FavouritesEntry.COLUMN_FAVOURITE_ID, mMovie.id);
+                    long _id = db.insert(FavouritesContract.FavouritesEntry.TABLE_NAME, null, favValues);
+
+//                    if ( _id > 0 ) {
+//                        retCursor = fDbHelper.getReadableDatabase().query(
+//                                FavouritesContract.FavouritesEntry.TABLE_NAME,
+//                                null,
+//                                null,
+//                                null,
+//                                null,
+//                                null,
+//                                null
+//                        );
+//                    }
+//                    if(retCursor.moveToFirst()) {
+//                        do {
+//                            Log.i(LOG_TAG, "aaaaa= "+retCursor.getString(1));
+//                        } while(retCursor.moveToNext());
+//                    }
+//
+//                    retCursor.close();
+                    db.close();
+
+                }
+            });
         }
 
         // The detail Activity called via intent.  Inspect the intent for movies data.

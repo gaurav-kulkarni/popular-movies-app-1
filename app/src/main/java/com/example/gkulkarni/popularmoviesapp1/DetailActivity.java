@@ -42,48 +42,7 @@ public class DetailActivity extends AppCompatActivity {
 //                .add(R.id.movie_detail_container, new DetailActivityFragment())
 //                .commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View view) {
-//                fab.setImageDrawable(getResources().getDrawable(android.support.design.R.drawable.abc_btn_rating_star_on_mtrl_alpha, getApplicationContext().getTheme()));
 
-                Cursor retCursor = null;
-                Intent intent = getIntent();
-                if (intent != null) {
-                    Movie movie = (Movie) intent.getExtras().get(DetailActivityFragment.ARG_ITEM_ID);
-                    Snackbar.make(view, movie.original_title+" added to Favourites!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-
-                    FavouritesDbHelper fDbHelper = new FavouritesDbHelper(getApplicationContext());
-                    final SQLiteDatabase db = fDbHelper.getWritableDatabase();
-                    ContentValues favValues = new ContentValues();
-                    favValues.put(FavouritesContract.FavouritesEntry.COLUMN_FAVOURITE_ID, movie.id);
-                    long _id = db.insert(FavouritesContract.FavouritesEntry.TABLE_NAME, null, favValues);
-
-//                    if ( _id > 0 ) {
-//                        retCursor = fDbHelper.getReadableDatabase().query(
-//                                FavouritesContract.FavouritesEntry.TABLE_NAME,
-//                                null,
-//                                null,
-//                                null,
-//                                null,
-//                                null,
-//                                null
-//                        );
-//                    }
-//                    if(retCursor.moveToFirst()) {
-//                        do {
-//                            Log.i(LOG_TAG, "aaaaa= "+retCursor.getString(1));
-//                        } while(retCursor.moveToNext());
-//                    }
-//
-//                    retCursor.close();
-                    db.close();
-                }
-            }
-        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
