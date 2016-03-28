@@ -82,15 +82,39 @@ public class DetailActivityFragment extends Fragment {
                 public void onClick(View view) {
 //                fab.setImageDrawable(getResources().getDrawable(android.support.design.R.drawable.abc_btn_rating_star_on_mtrl_alpha, getApplicationContext().getTheme()));
 
-                    Cursor retCursor = null;
-                    Snackbar.make(view, mMovie.original_title + " added to Favourites!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+//                    Cursor retCursor = null;
 
                     FavouritesDbHelper fDbHelper = new FavouritesDbHelper(getActivity().getApplicationContext());
                     final SQLiteDatabase db = fDbHelper.getWritableDatabase();
-                    ContentValues favValues = new ContentValues();
-                    favValues.put(FavouritesContract.FavouritesEntry.COLUMN_FAVOURITE_ID, mMovie.id);
-                    long _id = db.insert(FavouritesContract.FavouritesEntry.TABLE_NAME, null, favValues);
+
+                    String[] tableColumns = new String[] { FavouritesContract.FavouritesEntry.COLUMN_FAVOURITE_ID };
+                    String whereClause = FavouritesContract.FavouritesEntry.COLUMN_FAVOURITE_ID+" = ?";
+                    String[] whereArgs = new String[] {mMovie.id};
+                    Cursor c = fDbHelper.getReadableDatabase().query(
+                            FavouritesContract.FavouritesEntry.TABLE_NAME,
+                            tableColumns,
+                            whereClause,
+                            whereArgs,
+                            null,
+                            null,
+                            null
+                    );
+
+                    if(c.moveToFirst()) {
+                        Snackbar.make(view, mMovie.original_title + " removed from Favourites!", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                        whereClause = FavouritesContract.FavouritesEntry.COLUMN_FAVOURITE_ID+" = ?";
+                        whereArgs = new String[] {mMovie.id};
+                        db.delete(FavouritesContract.FavouritesEntry.TABLE_NAME, whereClause, whereArgs);
+                    }
+                    else {
+                        Snackbar.make(view, mMovie.original_title + " added to Favourites!", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+
+                        ContentValues favValues = new ContentValues();
+                        favValues.put(FavouritesContract.FavouritesEntry.COLUMN_FAVOURITE_ID, mMovie.id);
+                        long _id = db.insert(FavouritesContract.FavouritesEntry.TABLE_NAME, null, favValues);
+                    }
 
 //                    if ( _id > 0 ) {
 //                        retCursor = fDbHelper.getReadableDatabase().query(
@@ -110,6 +134,7 @@ public class DetailActivityFragment extends Fragment {
 //                    }
 //
 //                    retCursor.close();
+                    c.close();
                     db.close();
 
                 }
